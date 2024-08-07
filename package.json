@@ -7,7 +7,7 @@
   "license": "UNLICENSED",
   "scripts": {
     "build": "nest build",
-    "format":  "prettier --write 'src/**/*.{ts,tsx,js,jsx,json,css,scss,md}'",
+    "format": "prettier --write 'src/**/*.{ts,tsx,js,jsx,json,css,scss,md}'",
     "start": "nest start",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
@@ -24,6 +24,7 @@
     "@nestjs/core": "^10.0.0",
     "@nestjs/mongoose": "^10.0.10",
     "@nestjs/platform-express": "^10.0.0",
+    "bcrypt": "^5.1.1",
     "mongodb": "^6.8.0",
     "mongoose": "^8.5.2",
     "reflect-metadata": "^0.2.0",
