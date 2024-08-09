@@ -3,7 +3,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { JwtModule } from '@nestjs/jwt';
 import { join } from 'path/posix';
-import { secret } from './utils/constants';
+import { secret } from 'src/utils/constants';
 
 @Module({
   imports: [
