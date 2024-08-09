@@ -1,8 +1,19 @@
-import { Controller, Post, Body, Res, HttpStatus } from '@nestjs/common';
-import { UserService } from './user.service';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpStatus,
+  Param,
+  Post,
+  UploadedFiles,
+  Put,
+  Req,
+  Res,
+} from '@nestjs/common';
 import { User } from '../model/user.schema';
 import { JwtService } from '@nestjs/jwt';
-
+import { UserService } from './user.service';
 @Controller('user')
 export class UserController {
   constructor(
@@ -20,6 +31,7 @@ export class UserController {
 
   @Post('signin')
   async signIn(@Res() response, @Body() user: User) {
+    console.log('SIGNING THE USER IN');
     const token = await this.userService.signIin(user, this.jwtService);
     return response.status(HttpStatus.OK).json({
       token,
