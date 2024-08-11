@@ -4,16 +4,19 @@ import { Model } from 'mongoose';
 import { User, UserDocument } from 'src/model/user.schema';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
-
+import { secret } from 'src/utils/constants';
 @Injectable()
 export class UserService {
-  constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
+  constructor(
+    @InjectModel(User.name) private userModel: Model<UserDocument>,
+    private jwtService: JwtService,
+  ) {}
 
   async signup(user: User): Promise<User> {
     const salt = await bcrypt.genSalt();
     const hashedPassword = await bcrypt.hash(user.password, salt);
     const reqBody = {
-      fullName: user.name,
+      name: user.name,
       email: user.email,
       password: hashedPassword,
     };
@@ -21,24 +24,34 @@ export class UserService {
     return newUser.save();
   }
 
-  async signIin(user: User, jwt: JwtService): Promise<any> {
+  async signIn(user: User): Promise<any> {
     const foundUser = await this.userModel
       .findOne({ email: user.email })
       .exec();
-    if (foundUser) {
-      const { password } = foundUser;
-      if (await bcrypt.compare(password, user.password)) {
-        //password is from the database and user.password is the password mentioned on logging in
-        const payload = { email: user.email };
-        return {
-          token: jwt.sign(payload),
-        };
-      }
-      return new HttpException(
+
+    if (!foundUser) {
+      throw new HttpException('User not found', HttpStatus.FORBIDDEN);
+    }
+
+    const isPasswordMatching = await bcrypt.compare(
+      user.password,
+      foundUser.password,
+    );
+    if (!isPasswordMatching) {
+      throw new HttpException(
         'Incorrect username or password',
         HttpStatus.FORBIDDEN,
       );
     }
-    return new HttpException('User not found', HttpStatus.FORBIDDEN);
+
+    // return user;
+
+    const payload = { email: user.email };
+    const token = await this.jwtService.signAsync(payload, {
+      expiresIn: '15m',
+      secret,
+    });
+    console.log(token);
+    return { token };
   }
 }

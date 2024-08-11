@@ -31,10 +31,16 @@ export class UserController {
 
   @Post('signin')
   async signIn(@Res() response, @Body() user: User) {
-    console.log('SIGNING THE USER IN');
-    const token = await this.userService.signIin(user, this.jwtService);
-    return response.status(HttpStatus.OK).json({
-      token,
-    });
+    try {
+      const token = await this.userService.signIn(user);
+      return response.status(HttpStatus.OK).json({
+        message: 'User successfully signed in',
+        token,
+      });
+    } catch (error) {
+      return response.status(error.status || HttpStatus.FORBIDDEN).json({
+        message: error.message || 'Error: Unable to sign in',
+      });
+    }
   }
 }
