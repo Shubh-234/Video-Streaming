@@ -48,7 +48,7 @@ export class UserService {
 
     const payload = { email: user.email };
     const token = await this.jwtService.signAsync(payload, {
-      expiresIn: '15m',
+      expiresIn: '60m',
       secret,
     });
     console.log(token);
