@@ -22,7 +22,7 @@ import {
 
 @Controller('video')
 export class VideoController {
-  constructor(private readonly videService: VideoService) {}
+  constructor(private readonly videoService: VideoService) {}
 
   @Post()
   @UseInterceptors(
@@ -64,7 +64,7 @@ export class VideoController {
   }
   @Delete('/:id')
   async delete(@Res() response, @Param('id') id) {
-    await this.videoService.delete(id);
+    await this.videoService.delelteVideo(id);
     return response.status(HttpStatus.OK).json({
       user: null,
     });

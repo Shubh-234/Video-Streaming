@@ -7,8 +7,7 @@ import { diskStorage } from 'multer';
 import { v4 as uuidv4 } from 'uuid';
 
 import { UserModule } from './user/user.module';
-import { VideoController } from './video/video.controller';
-import { VideoService } from './video/video.service';
+import { VideoModule } from './video/video.module';
 //uuid is a package that generates unique identifiers (UUIDs).
 //A UUID is a string that is globally unique, which means that no two UUIDs will ever be the same.
 //uuid just to create unique file name
@@ -35,13 +34,12 @@ import { VideoService } from './video/video.service';
 
     // Feature Modules
     UserModule,
+    VideoModule,
 
     // Catch-All or Static File Serving Modules
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'public'),
     }),
   ],
-  controllers: [VideoController],
-  providers: [VideoService],
 })
 export class AppModule {}
