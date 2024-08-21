@@ -54,4 +54,7 @@ export class UserService {
     console.log(token);
     return { token };
   }
+  async getOne(email): Promise<User> {
+    return await this.userModel.findOne({ email }).exec();
+  }
 }
