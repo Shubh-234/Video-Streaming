@@ -8,6 +8,10 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { UserModule } from './user/user.module';
 import { VideoModule } from './video/video.module';
+import { MiddlewareConsumer } from '@nestjs/common';
+import { isAuthenticated } from './app.middleware';
+import { VideoController } from './video/video.controller';
+import { JwtService } from '@nestjs/jwt';
 //uuid is a package that generates unique identifiers (UUIDs).
 //A UUID is a string that is globally unique, which means that no two UUIDs will ever be the same.
 //uuid just to create unique file name
@@ -41,5 +45,13 @@ import { VideoModule } from './video/video.module';
       rootPath: join(__dirname, '..', 'public'),
     }),
   ],
+  providers: [JwtService],
 })
-export class AppModule {}
+export class AppModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(isAuthenticated)
+      .exclude('video/:id')
+      .forRoutes(VideoController);
+  }
+}

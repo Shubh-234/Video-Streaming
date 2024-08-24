@@ -14,6 +14,11 @@ async function bootstrap() {
   } catch (err) {
     console.error('Connection to MongoDB failed', err);
   }
+  app.enableCors({
+    origin: 'http://localhost:3000', // or '*' to allow all origins
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true,
+  });
   await app.listen(3005);
 }
 bootstrap();
